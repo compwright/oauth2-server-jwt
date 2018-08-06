@@ -1,0 +1,38 @@
+{
+  "name": "oauth2-server-jwt",
+  "version": "1.0.0",
+  "description": "Model mixin for oauth2-server to generate access tokens in JWT format",
+  "main": "src/",
+  "scripts": {
+    "pretest": "eslint src test",
+    "test": "mocha src test"
+  },
+  "keywords": [
+    "oauth2-server",
+    "jwt",
+    "access",
+    "token",
+    "accessToken",
+    "json web token"
+  ],
+  "author": "Jonathon Hill <jhill9693@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github:compwright/oauth2-server-jwt"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "mocha": "^5.2.0"
+  },
+  "peerDependencies": {
+    "@compwright/oauth2-server": "^3.0.3"
+  }
+}
