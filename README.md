@@ -1,6 +1,6 @@
 # oauth2-server-jwt
 
-[![Build Status](https://travis-ci.org/compwright/oauth2-server-jwt.svg?branch=master)](https://travis-ci.org/compwright/oauth2-server-jwt)
+[![Build Status](https://travis-ci.org/compwright/oauth2-server-jwt.svg?branch=master)](https://travis-ci.org/compwright/oauth2-server-jwt) [![Greenkeeper badge](https://badges.greenkeeper.io/compwright/oauth2-server-jwt.svg)](https://greenkeeper.io/)
 
 Model mixin for [oauth2-server](https://github.com/compwright/node-oauth2-server) to generate access tokens in JWT format
 
