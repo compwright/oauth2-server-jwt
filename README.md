@@ -2,7 +2,12 @@
 
 [![Build Status](https://travis-ci.org/compwright/oauth2-server-jwt.svg?branch=master)](https://travis-ci.org/compwright/oauth2-server-jwt) [![Greenkeeper badge](https://badges.greenkeeper.io/compwright/oauth2-server-jwt.svg)](https://greenkeeper.io/)
 
-Model mixin for [oauth2-server](https://github.com/compwright/node-oauth2-server) to generate access tokens in JWT format
+Storageless JWT token generator backend for [oauth2-server](https://github.com/compwright/node-oauth2-server)
+
+## Features
+
+* Respects oauth2-server token lifetime configuration for each type of token
+* Generates JWT access tokens, refresh tokens, and authorization codes
 
 ## Requirements
 
@@ -22,28 +27,18 @@ const OAuth2Server = require('@compwright/oauth2-server');
 const jwt = require('oauth2-server-jwt');
 
 const oauth = new OAuth2Server({
-    model: {
-        ...jwt({
-            jwtid,      // Function({ client, user, scope })
-            secret,     // String
-            issuer,     // String
-            expiresIn,  // Number
-            audience,   // String|Function({ client, user, scope })
-            payload,    // String|Function({ client, user, scope })
-            subject     // String|Function({ client, user, scope })
-        })
-    }
+    model: jwt({
+        accessTokenSecret,                  // String (required)
+        refreshTokenSecret,                 // String (required)
+        authorizationCodeSecret,            // String (required)
+        issuer,                             // String (required)
+        userId: 'id'                        // String
+        clientId: 'id'                      // String
+        clientRedirectUri: 'redirectUri',   // String
+        algorithms: ['HS256']               // Array[String]
+    })
 });
 ```
-
-Default configuration:
-
-Claim   |   Value
---------|--------
-`jti`   | 32-char cryptographically-secure random string
-`aud`   | `client.id`
-`sub`   | `user` (note: you must pass in a `subject({ client, user, scope})` getter function if you expect `user` to be an object)
-payload | `{ user }`
 
 ## License
 

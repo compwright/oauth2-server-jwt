@@ -1,7 +1,7 @@
 {
   "name": "oauth2-server-jwt",
   "version": "1.0.0",
-  "description": "Model mixin for oauth2-server to generate access tokens in JWT format",
+  "description": "Storageless JWT token generator backend for oauth2-server",
   "main": "src/",
   "scripts": {
     "pretest": "eslint src test",
@@ -26,10 +26,11 @@
   },
   "dependencies": {
     "jsonwebtoken": "^8.3.0",
-    "lodash": "^4.17.10"
+    "promisify-any": "^2.0.1"
   },
   "devDependencies": {
     "eslint": "^5.3.0",
+    "lodash": "^4.17.10",
     "mocha": "^5.2.0"
   },
   "peerDependencies": {
