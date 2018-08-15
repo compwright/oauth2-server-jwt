@@ -41,12 +41,12 @@ module.exports = (options = {}) => {
             const newToken = { ...token, client, user };
 
             // eslint-disable-next-line no-unused-vars
-            const { payload, secret, nbf, exp, ...params } = accessToken(token, client, user);
+            const { payload, secret, iat, nbf, exp, ...params } = accessToken(token, client, user);
             newToken.accessToken = await signAsync(payload, secret, params);
 
             if (token.refreshToken) {
                 // eslint-disable-next-line no-unused-vars
-                const { payload, secret, nbf, exp, ...params } = refreshToken(token, client, user);
+                const { payload, secret, iat, nbf, exp, ...params } = refreshToken(token, client, user);
                 newToken.refreshToken = await signAsync(payload, secret, params);
             }
 
@@ -57,7 +57,7 @@ module.exports = (options = {}) => {
             const newCode = { ...code, client, user };
 
             // eslint-disable-next-line no-unused-vars
-            const { payload, secret, nbf, exp, ...params } = authorizationCode(code, client, user);
+            const { payload, secret, iat, nbf, exp, ...params } = authorizationCode(code, client, user);
             newCode.code = await signAsync(payload, secret, params);
 
             return newCode;

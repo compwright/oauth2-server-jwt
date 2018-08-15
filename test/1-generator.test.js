@@ -117,8 +117,10 @@ describe('JWT claim generators', () => {
         it('should include the token type', (done) => {
             const type = 'bingo';
             const jwt = generator({ type })({});
-            const exp = Math.floor(Date.now() / 1000) + 30;
-            assert.deepEqual(jwt.payload, { type, exp, nbf: exp - 35 });
+            const iat = Math.floor(Date.now() / 1000);
+            const nbf = iat - 1;
+            const exp = iat + 30;
+            assert.deepEqual(jwt.payload, { type, exp, nbf, iat });
             done();
         });
 
@@ -126,9 +128,11 @@ describe('JWT claim generators', () => {
             const scope = 'read';
             const jwt1 = generator({})({ scope });
             const jwt2 = generator({})({ scope: 'UNSUPPORTED' });
-            const exp = Math.floor(Date.now() / 1000) + 30;
-            assert.deepEqual(jwt1.payload, { type: undefined, scope, exp, nbf: exp - 35 });
-            assert.deepEqual(jwt2.payload, { type: undefined, exp, nbf: exp - 35 });
+            const iat = Math.floor(Date.now() / 1000);
+            const nbf = iat - 1;
+            const exp = iat + 30;
+            assert.deepEqual(jwt1.payload, { type: undefined, scope, exp, nbf, iat });
+            assert.deepEqual(jwt2.payload, { type: undefined, exp, nbf, iat });
             done();
         });
     });

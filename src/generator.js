@@ -29,12 +29,16 @@ module.exports = ({ issuer, secret, userId, type }) => (token, client, user) => 
             return Math.floor(Date.now() / 1000) + 30; // seconds
         }
     },
+
+    get iat() {
+        return Math.floor(Date.now() / 1000); // seconds
+    },
     
     get nbf() {
         if (type === 'refreshToken') {
             return Math.floor(token.accessTokenExpiresAt / 1000);
         } else {
-            return this.exp - 35;
+            return this.iat - 1;
         }
     },
 
@@ -55,7 +59,7 @@ module.exports = ({ issuer, secret, userId, type }) => (token, client, user) => 
     },
     
     get payload() {
-        const payload = { nbf: this.nbf, exp: this.exp, type };
+        const payload = { iat: this.iat, nbf: this.nbf, exp: this.exp, type };
 
         if (typeof user === 'object') {
             payload.user = user;
