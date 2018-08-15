@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const promisify = require('promisify-any');
 const InvalidTokenError = require('@compwright/oauth2-server/lib/errors/invalid-token-error');
+const InvalidClientError = require('@compwright/oauth2-server/lib/errors/invalid-client-error');
 const generator = require('./generator');
 
 const signAsync = promisify(jwt.sign, 3);
@@ -13,7 +14,6 @@ module.exports = (options = {}) => {
         refreshTokenSecret,
         authorizationCodeSecret,
         userId = 'id',
-        clientId = 'id',
         clientRedirectUri = 'redirectUri',
         algorithms = ['HS256']
     } = options;
@@ -21,19 +21,19 @@ module.exports = (options = {}) => {
     const authorizationCode = generator({
         type: 'authorizationCode',
         secret: authorizationCodeSecret,
-        issuer, userId, clientId,
+        issuer, userId
     });
     
     const accessToken = generator({
         type: 'accessToken',
         secret: accessTokenSecret,
-        issuer, userId, clientId,
+        issuer, userId
     });
     
     const refreshToken = generator({
         type: 'refreshToken',
         secret: refreshTokenSecret,
-        issuer, userId, clientId,
+        issuer, userId
     });
     
     return {
@@ -64,78 +64,108 @@ module.exports = (options = {}) => {
         },
 
         getAccessToken: async function(token) {
-            if (!clientId) {
-                throw new Error('Missing clientId configuration');
-            }
-
             try {
-                var { exp, scope, user } = await verifyAsync(token, accessTokenSecret, {
+                var { exp, aud, type, scope, user } = await verifyAsync(token, accessTokenSecret, {
                     algorithms,
-                    issuer,
-                    audience: this.client[clientId]
+                    issuer
                 });
             } catch (e) {
                 throw new InvalidTokenError();
+            }
+
+            if (type !== 'accessToken') {
+                throw new InvalidTokenError();
+            }
+
+            if (this.getClient) {
+                try {
+                    var client = aud && await this.getClient(aud, null);
+                    if (!client) {
+                        throw new Error();
+                    }
+                } catch (e) {
+                    throw new InvalidClientError();
+                }
             }
 
             return {
                 accessToken: token,
                 accessTokenExpiresAt: new Date(exp * 1000),
                 scope,
-                client: this.client,
+                client: client || { id: aud },
                 user
             };
         },
 
         getRefreshToken: async function(token) {
-            if (!clientId) {
-                throw new Error('Missing clientId configuration');
-            }
-
             try {
-                var { exp, scope, user } = await verifyAsync(token, refreshTokenSecret, {
+                var { exp, aud, type, scope, user } = await verifyAsync(token, refreshTokenSecret, {
                     algorithms,
-                    issuer,
-                    audience: this.client[clientId]
+                    issuer
                 });
             } catch (e) {
                 throw new InvalidTokenError();
+            }
+
+            if (type !== 'refreshToken') {
+                throw new InvalidTokenError();
+            }
+
+            if (this.getClient) {
+                try {
+                    var client = aud && await this.getClient(aud, null);
+                    if (!client) {
+                        throw new Error();
+                    }
+                } catch (e) {
+                    throw new InvalidClientError();
+                }
             }
 
             return {
                 refreshToken: token,
                 refreshTokenExpiresAt: new Date(exp * 1000),
                 scope,
-                client: this.client,
+                client: client || { id: aud },
                 user
             };
         },
 
         getAuthorizationCode: async function(code) {
-            if (!clientId) {
-                throw new Error('Missing clientId configuration');
-            }
-
             if (!clientRedirectUri) {
                 throw new Error('Missing clientRedirectUri configuration');
             }
 
             try {
-                var { exp, scope, user } = await verifyAsync(code, authorizationCodeSecret, {
+                var { exp, aud, type, redirectUri, scope, user } = await verifyAsync(code, authorizationCodeSecret, {
                     algorithms,
-                    issuer,
-                    audience: this.client[clientId]
+                    issuer
                 });
             } catch (e) {
                 throw new InvalidTokenError();
             }
 
+            if (type !== 'authorizationCode') {
+                throw new InvalidTokenError();
+            }
+
+            if (this.getClient) {
+                try {
+                    var client = aud && await this.getClient(aud, null);
+                    if (!client) {
+                        throw new Error();
+                    }
+                } catch (e) {
+                    throw new InvalidClientError();
+                }
+            }
+
             return {
                 code,
                 expiresAt: new Date(exp * 1000),
-                redirectUri: this.client[clientRedirectUri],
+                redirectUri,
                 scope,
-                client: this.client,
+                client: client || { id: aud },
                 user
             };
         },

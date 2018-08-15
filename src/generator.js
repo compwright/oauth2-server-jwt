@@ -1,4 +1,4 @@
-module.exports = ({ issuer, secret, userId, clientId, type }) => (token, client, user) => ({
+module.exports = ({ issuer, secret, userId, type }) => (token, client, user) => ({
     secret,
     issuer,
 
@@ -51,11 +51,7 @@ module.exports = ({ issuer, secret, userId, clientId, type }) => (token, client,
     },
 
     get audience() {
-        if (clientId) {
-            return client[clientId];
-        } else {
-            throw new Error('Missing clientId configuration');
-        }
+        return client.id;
     },
     
     get payload() {
@@ -67,6 +63,10 @@ module.exports = ({ issuer, secret, userId, clientId, type }) => (token, client,
 
         if (token.scope && token.scope !== 'UNSUPPORTED') {
             payload.scope = token.scope;
+        }
+
+        if (type === 'authorizationCode') {
+            payload.redirectUri = token.redirectUri;
         }
 
         return payload;

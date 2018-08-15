@@ -9,6 +9,14 @@ Storageless JWT token generator backend for [oauth2-server](https://github.com/c
 * Respects oauth2-server token lifetime configuration for each type of token
 * Generates JWT access tokens, refresh tokens, and authorization codes
 
+## Limitations
+
+For proper verification of `aud`, `scope`, and `redirectUri`, you will need to implement [`model.getClient()`](https://oauth2-server.readthedocs.io/en/latest/model/spec.html#getclient-clientid-clientsecret-callback) separately.
+
+If you need to support the `password` grant type, you will also need to implement [`model.getUser()`](https://oauth2-server.readthedocs.io/en/latest/model/spec.html#getuser-username-password-callback) separately.
+
+Suggested implementation: [oauth2-server-mongoose](https://github.com/compwright/oauth2-server-mongoose)
+
 ## Requirements
 
 * Node.js 8+
@@ -24,19 +32,21 @@ $ npm install --save @compwright/oauth2-server oauth2-server-jwt
 
 ```javascript
 const OAuth2Server = require('@compwright/oauth2-server');
-const jwt = require('oauth2-server-jwt');
+const jwtMixin = require('oauth2-server-jwt');
+const mongooseMixin = require('oauth2-server-mongoose');
 
 const oauth = new OAuth2Server({
-    model: jwt({
-        accessTokenSecret,                  // String (required)
-        refreshTokenSecret,                 // String (required)
-        authorizationCodeSecret,            // String (required)
-        issuer,                             // String (required)
-        userId: 'id'                        // String
-        clientId: 'id'                      // String
-        clientRedirectUri: 'redirectUri',   // String
-        algorithms: ['HS256']               // Array[String]
-    })
+    model: {
+        ...jwtMixin({
+            accessTokenSecret,                  // String (required)
+            refreshTokenSecret,                 // String (required)
+            authorizationCodeSecret,            // String (required)
+            issuer,                             // String (required)
+            userId: 'id'                        // String
+            algorithms: ['HS256']               // Array[String]
+        }),
+        ...mongooseMixin()
+    }
 });
 ```
 
