@@ -19,7 +19,7 @@ describe('JWT claim generators', () => {
 
         it('should use the code value for authorization codes', (done) => {
             const ac = generator({ type: 'authorizationCode' });
-            const t3 = { code: 'zxcv6789' };
+            const t3 = { authorizationCode: 'zxcv6789' };
             assert.strictEqual(ac(t3).jwtid, 'zxcv6789');
             done();
         });

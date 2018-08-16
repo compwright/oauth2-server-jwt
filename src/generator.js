@@ -3,17 +3,7 @@ module.exports = ({ issuer, secret, userId, type }) => (token, client, user) => 
     issuer,
 
     get jwtid() {
-        switch (type) {
-        case 'accessToken':
-        case 'refreshToken':
-            return token[type];
-
-        case 'authorizationCode':
-            return token.code;
-
-        default:
-            return undefined;
-        }
+        return token[type];
     },
     
     get exp() {

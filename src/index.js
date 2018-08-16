@@ -58,7 +58,7 @@ module.exports = (options = {}) => {
 
             // eslint-disable-next-line no-unused-vars
             const { payload, secret, iat, nbf, exp, ...params } = authorizationCode(code, client, user);
-            newCode.code = await signAsync(payload, secret, params);
+            newCode.authorizationCode = await signAsync(payload, secret, params);
 
             return newCode;
         },

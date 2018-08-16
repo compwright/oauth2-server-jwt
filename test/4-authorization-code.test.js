@@ -14,7 +14,7 @@ describe('Authorization Codes', () => {
     };
 
     const code = {
-        code: '12345',
+        authorizationCode: '12345',
         expiresAt: new Date(Date.now() + 1000),
         redirectUri: client.redirectUri,
         scope: 'read write'
@@ -31,7 +31,7 @@ describe('Authorization Codes', () => {
     describe('saveAuthorizationCode()', async () => {
         it('should return the expected object format', async () => {
             const newCode = await api.saveAuthorizationCode(code, client, user);
-            assert(has(newCode, 'code'));
+            assert(has(newCode, 'authorizationCode'));
             assert(has(newCode, 'expiresAt'));
             assert(has(newCode, 'scope'));
             assert(has(newCode, 'client'));
@@ -41,9 +41,9 @@ describe('Authorization Codes', () => {
         it('should convert the authorizationCode to a JWT', async () => {
             const newCode = await api.saveAuthorizationCode(code, client, user);
             
-            const { iat, exp, aud, iss, sub, jti, ...custom } = verify(newCode.code, settings.authorizationCodeSecret);
+            const { iat, exp, aud, iss, sub, jti, ...custom } = verify(newCode.authorizationCode, settings.authorizationCodeSecret);
 
-            assert.equal(typeof newCode.code, 'string');
+            assert.equal(typeof newCode.authorizationCode, 'string');
             assert(iat < exp);
             assert.equal(typeof exp, 'number');
             assert.deepStrictEqual(custom.scope, code.scope);
@@ -51,18 +51,18 @@ describe('Authorization Codes', () => {
             assert.strictEqual(sub, user[settings.userId]);
             assert.strictEqual(aud, client.id);
             assert.strictEqual(iss, settings.issuer);
-            assert.strictEqual(jti, code.code);
+            assert.strictEqual(jti, code.authorizationCode);
         });
     });
 
     describe('getAuthorizationCode()', () => {
         it('should return the expected object format', async () => {
-            const res = await api.saveAuthorizationCode(code, client, user);
+            let { authorizationCode, ...res } = await api.saveAuthorizationCode(code, client, user);
 
             res.expiresAt = new Date(1000 * Math.floor(res.expiresAt / 1000)); // round to nearest second, since JWT doesn't do milliseconds
 
-            const newCode = await api.getAuthorizationCode.call({ client }, res.code);
-            assert.deepEqual(res, { ...newCode, client, user });
+            const newCode = await api.getAuthorizationCode.call({ client }, authorizationCode);
+            assert.deepEqual({ ...res, code: authorizationCode }, { ...newCode, client, user });
         });
 
         it('should throw InvalidTokenError when invalid', (done) => {
