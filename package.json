@@ -1,6 +1,6 @@
 {
   "name": "oauth2-server-jwt",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Storageless JWT token generator backend for oauth2-server",
   "main": "src/",
   "scripts": {
