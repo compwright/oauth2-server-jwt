@@ -19,7 +19,7 @@ Suggested implementation: [oauth2-server-mongoose](https://github.com/compwright
 
 ## Requirements
 
-* Node.js 8+
+* Node.js 10+
 * [oauth2-server](https://github.com/compwright/node-oauth2-server)
 
 ## Installation

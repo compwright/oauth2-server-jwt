@@ -18,7 +18,7 @@
   "author": "Jonathon Hill <jhill9693@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "repository": {
     "type": "git",
@@ -30,9 +30,9 @@
   },
   "devDependencies": {
     "@compwright/oauth2-server": "^3.0.3",
-    "eslint": "^6.3.0",
-    "lodash": "^4.17.15",
-    "mocha": "^7.1.0"
+    "eslint": "^7.15.0",
+    "lodash": "^4.17.20",
+    "mocha": "^8.2.1"
   },
   "peerDependencies": {
     "@compwright/oauth2-server": "^3.0.3"

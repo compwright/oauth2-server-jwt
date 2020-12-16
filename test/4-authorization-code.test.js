@@ -43,11 +43,11 @@ describe('Authorization Codes', () => {
             
             const { iat, exp, aud, iss, sub, jti, ...custom } = verify(newCode.authorizationCode, settings.authorizationCodeSecret);
 
-            assert.equal(typeof newCode.authorizationCode, 'string');
+            assert.strictEqual(typeof newCode.authorizationCode, 'string');
             assert(iat < exp);
-            assert.equal(typeof exp, 'number');
+            assert.strictEqual(typeof exp, 'number');
             assert.deepStrictEqual(custom.scope, code.scope);
-            assert.deepEqual(custom.user, user);
+            assert.deepStrictEqual(custom.user, user);
             assert.strictEqual(sub, user[settings.userId]);
             assert.strictEqual(aud, client.id);
             assert.strictEqual(iss, settings.issuer);
