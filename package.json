@@ -30,9 +30,9 @@
   },
   "devDependencies": {
     "@compwright/oauth2-server": "^3.0.3",
-    "eslint": "^7.15.0",
-    "lodash": "^4.17.20",
-    "mocha": "^10.1.0"
+    "eslint": "latest",
+    "lodash": "latest",
+    "mocha": "latest"
   },
   "peerDependencies": {
     "@compwright/oauth2-server": "^3.0.3"
