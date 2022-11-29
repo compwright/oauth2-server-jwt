@@ -18,7 +18,7 @@
   "author": "Jonathon Hill <jhill9693@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,6 @@
 # oauth2-server-jwt
 
-[![Build Status](https://travis-ci.org/compwright/oauth2-server-jwt.svg?branch=master)](https://travis-ci.org/compwright/oauth2-server-jwt)
-[![Dependency Status](https://img.shields.io/david/compwright/oauth2-server-jwt.svg?style=flat-square)](https://david-dm.org/compwright/oauth2-server-jwt)
+[![Build Status](https://app.travis-ci.com/compwright/oauth2-server-jwt.svg?branch=master)](https://app.travis-ci.com/compwright/oauth2-server-jwt)
 [![Download Status](https://img.shields.io/npm/dm/oauth2-server-jwt.svg?style=flat-square)](https://www.npmjs.com/package/oauth2-server-jwt)
 [![Sponsor on GitHub](https://img.shields.io/static/v1?label=Sponsor&message=❤&logo=GitHub&link=https://github.com/sponsors/compwright)](https://github.com/sponsors/compwright)
 
