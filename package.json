@@ -25,7 +25,7 @@
     "url": "github:compwright/oauth2-server-jwt"
   },
   "dependencies": {
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "promisify-any": "^2.0.1"
   },
   "devDependencies": {
